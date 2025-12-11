@@ -1,0 +1,3 @@
+- [ ] Tạo component Contact.jsx cho trang Liên hệ
+- [ ] Cập nhật App.jsx để thiết lập routing với React Router
+- [ ] Sửa Header.jsx để sử dụng Link component cho navigation

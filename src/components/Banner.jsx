@@ -46,8 +46,8 @@ const Banner = () => {
         ? `https://image.tmdb.org/t/p/w500${bannerMovie.poster_path}`
         : ImgMovie;
 
-    const title = bannerMovie?.title || bannerMovie?.name || "Nghe nói em thích tôi";
-    const overview = bannerMovie?.overview || "Câu chuyện xoay quanh mối quan hệ giữa một chàng trai giàu có và một cô gái bình thường, khi họ vô tình gặp nhau và bắt đầu một hành trình đầy cảm xúc...";
+    const title = bannerMovie?.title || bannerMovie?.name || "";
+    const overview = bannerMovie?.overview || "";
     const vote = bannerMovie?.vote_average ? bannerMovie.vote_average.toFixed(1) : null;
 
     return (
@@ -60,7 +60,9 @@ const Banner = () => {
                 <div className="flex flex-col space-y-5 items-start w-full lg:w-1/2 text-white">
                     <p className="bg-gradient-to-r from-red-600 to-red-400 text-sm md:text-md py-2 px-5 rounded-full">TV Show</p>
                     <div className="flex flex-col space-y-4">
-                        <h2 className="text-3xl md:text-4xl font-bold leading-tight">{title}</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold leading-tight">
+                            {loading ? "Loading..." : (title || "Chưa có tiêu đề")}
+                        </h2>
                         <div className="flex items-center space-x-2 md:space-x-3">
                             <img src={IconRating} alt="rating" className="w-6 h-6 md:w-8 md:h-8" />
                             <img src={IconRating} alt="rating" className="w-6 h-6 md:w-8 md:h-8" />
@@ -69,7 +71,9 @@ const Banner = () => {
                             <img src={IconRatingHalf} alt="rating-half" className="w-6 h-6 md:w-8 md:h-8" />
                             {vote && <span className="text-sm md:text-base text-gray-200 ml-1">({vote}/10)</span>}
                         </div>
-                        <p className="text-base md:text-lg lg:text-2xl text-gray-200">{overview}</p>
+                        <p className="text-base md:text-lg lg:text-2xl text-gray-200">
+                            {loading ? "Đang tải dữ liệu banner..." : (overview || "Chưa có mô tả.")}
+                        </p>
                     </div>
                     {loading && <p className="text-sm text-gray-200">Đang tải phim đang chiếu...</p>}
                     {error && <p className="text-sm text-red-300">{error}</p>}

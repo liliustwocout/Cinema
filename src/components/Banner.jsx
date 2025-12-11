@@ -71,7 +71,7 @@ const Banner = () => {
                             <img src={IconRatingHalf} alt="rating-half" className="w-6 h-6 md:w-8 md:h-8" />
                             {vote && <span className="text-sm md:text-base text-gray-200 ml-1">({vote}/10)</span>}
                         </div>
-                        <p className="text-base md:text-lg lg:text-2xl text-gray-200">
+                        <p className="text-base md:text-lg lg:text-2xl text-gray-200 text-justify">
                             {loading ? "Đang tải dữ liệu banner..." : (overview || "Chưa có mô tả.")}
                         </p>
                     </div>

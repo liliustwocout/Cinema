@@ -33,6 +33,12 @@ const Header = ({ onSearch }) => {
                             placeholder="Tìm kiếm"
                             className="p-2 bg-white text-black rounded-md flex-1 md:flex-none"
                             onChange={(e) => setSearch(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    e.preventDefault();
+                                    onSearch(textSearch);
+                                }
+                            }}
                             value={textSearch}
                         />
                         <button

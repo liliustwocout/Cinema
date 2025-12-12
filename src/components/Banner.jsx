@@ -7,9 +7,11 @@ import { MovieContext } from "../context/MovieProvider";
 
 const Banner = () => {
     const [bannerMovie, setBannerMovie] = useState(null);
+    const [movieList, setMovieList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { handleOpenDetail } = useContext(MovieContext);
+    const { handleOpenDetail, detailModalOpen } = useContext(MovieContext);
+    const [isHover, setIsHover] = useState(false);
 
     useEffect(() => {
         const fetchNowPlaying = async () => {
@@ -25,7 +27,11 @@ const Banner = () => {
                 const res = await fetch(url, options);
                 const data = await res.json();
                 if (Array.isArray(data.results) && data.results.length > 0) {
+                    setMovieList(data.results);
                     setBannerMovie(data.results[0]);
+                } else {
+                    setMovieList([]);
+                    setBannerMovie(null);
                 }
                 setError(null);
             } catch (error) {
@@ -38,13 +44,26 @@ const Banner = () => {
         fetchNowPlaying();
     }, []);
 
+    useEffect(() => {
+        let timer;
+        if (!movieList.length || isHover || detailModalOpen || loading) return;
+        timer = setInterval(() => {
+            setBannerMovie(prev => {
+                const currentIndex = prev ? movieList.findIndex(m => m.id === prev.id) : -1;
+                const nextIndex = currentIndex >= 0 ? (currentIndex + 1) % movieList.length : 0;
+                return movieList[nextIndex];
+            });
+        }, 5000);
+        return () => clearInterval(timer);
+    }, [movieList, isHover, detailModalOpen, loading]);
+
     const backdropUrl = bannerMovie?.backdrop_path
         ? `https://image.tmdb.org/t/p/original${bannerMovie.backdrop_path}`
-        : "/banner.png";
+        : "";
 
     const posterUrl = bannerMovie?.poster_path
         ? `https://image.tmdb.org/t/p/w500${bannerMovie.poster_path}`
-        : ImgMovie;
+        : "";
 
     const title = bannerMovie?.title || bannerMovie?.name || "";
     const overview = bannerMovie?.overview || "";
@@ -54,6 +73,8 @@ const Banner = () => {
         <div
             className="w-full min-h-[600px] lg:h-[800px] bg-center bg-no-repeat bg-cover relative mt-10"
             style={{ backgroundImage: `url(${backdropUrl})` }}
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
         >
             <div className="absolute w-full h-full top-0 left-0 bg-black opacity-50" />
             <div className="relative z-20 max-w-6xl mx-auto w-full h-full flex flex-col lg:flex-row items-center justify-center gap-10 px-6 md:px-10 py-12 lg:py-0">
